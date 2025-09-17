@@ -1,7 +1,12 @@
 <%- include('partials/header') %>
 
 <div class="container my-5">
-    <h1 class="mb-4">Welcome, Student!</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Welcome, Student!</h1>
+        <button id="voice-assistant-btn" class="btn btn-info">
+            🎤 Activate Voice Assistant
+        </button>
+    </div>
 
     <div class="card border-danger mb-5 shadow">
         <div class="card-header bg-danger text-white">
@@ -9,62 +14,129 @@
         </div>
         <div class="card-body">
             <% if (alert) { %>
-                <h5 class="card-title"><%= alert.title %> (Severity: <%= alert.severity %>)</h5>
-                <p class="card-text"><%= alert.message %></p>
-                <p class="card-text"><small class="text-muted">Issued for <%= alert.region %> at <%= alert.issuedAt.toLocaleString() %></small></p>
+                <div id="alert-content">
+                    <h5 class="card-title"><%= alert.title %> (Severity: <%= alert.severity %>)</h5>
+                    <p class="card-text"><%= alert.message %></p>
+                    <p class="card-text"><small class="text-muted">Issued for <%= alert.region %> at <%= new Date(alert.issuedAt).toLocaleString('en-IN') %></small></p>
+                </div>
             <% } else { %>
-                <p class="text-success fw-bold">All clear! No active alerts for your region.</p>
+                <p id="alert-content" class="text-success fw-bold">All clear! No active alerts for your region.</p>
             <% } %>
         </div>
     </div>
 
+    <% if (upcomingDrill) { %>
+        <div class="card border-info mb-5 shadow">
+            <div class="card-header bg-info text-dark">
+                <h4 class="mb-0">🗓️ Upcoming Drill</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><%= upcomingDrill.title %> (<%= upcomingDrill.drillType %> Drill)</h5>
+                <p class="card-text">
+                    This drill is scheduled for: <strong><%= new Date(upcomingDrill.scheduledFor).toLocaleString('en-IN') %></strong>.
+                    Please be prepared to participate.
+                </p>
+            </div>
+        </div>
+    <% } %>
+    
     <div class="row g-4">
+        
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 text-center feature-card">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Safety Courses</h5>
+                    <p class="card-text">Learn vital skills and earn XP by completing courses.</p>
+                    <a href="/courses" class="btn btn-primary mt-auto">Browse Courses</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Gamified Quiz</h5>
                     <p class="card-text">Test your knowledge on disaster safety and earn badges.</p>
-                    <a href="/quiz" class="btn btn-primary">Start Quiz</a>
+                    <a href="/quiz" class="btn btn-primary mt-auto">Start Quiz</a>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 text-center feature-card">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Emergency Contacts</h5>
                     <p class="card-text">Quick access to local emergency services numbers.</p>
-                    <a href="/contacts" class="btn btn-warning">View Contacts</a>
+                    <a href="/contacts" class="btn btn-warning mt-auto">View Contacts</a>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 text-center feature-card feature-disabled">
-                <div class="card-body">
-                    <h5 class="card-title">VR Mock Drills (Coming Soon)</h5>
-                    <p class="card-text">Experience realistic disaster scenarios in virtual reality.</p>
-                    <button class="btn btn-secondary" disabled>Launch VR</button>
+            <div class="card h-100 text-center feature-card">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">VR Mock Drills</h5>
+                    <p class="card-text">Experience realistic disaster scenarios in this interactive drill.</p>
+                    <a href="/vr-drill" class="btn btn-success mt-auto">Launch VR Drill</a>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 text-center feature-card feature-disabled">
-                <div class="card-body">
-                    <h5 class="card-title">Voice Assistant (Coming Soon)</h5>
-                    <p class="card-text">Ask for emergency tips and info using your voice.</p>
-                    <button class="btn btn-secondary" disabled>Activate Assistant</button>
+            <div class="card h-100 text-center feature-card">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">🏆 Leaderboard</h5>
+                    <p class="card-text">Check your rank and see the top performers.</p>
+                    <a href="/leaderboard" class="btn btn-info mt-auto">View Leaderboard</a>
                 </div>
             </div>
         </div>
-         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 text-center feature-card feature-disabled">
-                <div class="card-body">
-                    <h5 class="card-title">Offline Mode Info</h5>
-                    <p class="card-text">Key safety info is cached for access without internet.</p>
-                    <button class="btn btn-info" disabled>Cached Data</button>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">🤖 AI Kit Checker</h5>
+                    <p class="card-text">Upload a photo of your emergency supplies for an AI-powered analysis.</p>
+                    <a href="/check-kit" class="btn btn-warning mt-auto">Check My Kit</a>
                 </div>
             </div>
+        </div>
+
+    </div>
+
+    <hr class="my-5">
+    <div class="mb-5">
+        <h2 class="text-center mb-4">Learn from the Experts (NDRF)</h2>
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="ratio ratio-16x9">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/mTAqI0JINKw?si=wUpTS5xOjWJu0xPV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Earthquake Safety Tips</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="ratio ratio-16x9">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/1Ha30qMnGkU?si=ZEM2NSJ8EALXEL3N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Flood Safety Tips</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="ratio ratio-16x9">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/pVAFAWUjJiY?si=UkC-3O-Z5xxTHki9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                     <div class="card-body">
+                        <h5 class="card-title">Cyclone Preparedness</h5>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 
+<script src="/js/assistant.js"></script>
 <%- include('partials/footer') %>

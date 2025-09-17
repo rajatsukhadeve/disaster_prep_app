@@ -5,27 +5,49 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
-const Alert = require('./models/alert'); // We will create this model soon
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- Database Connection ---
-// Make sure your local MongoDB server is running!
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB Connected Successfully!'))
     .catch(err => console.error('MongoDB Connection Error:', err));
 
+// --- Seed Database with Dummy Students (for demo purposes) ---
+const User = require('./models/user');
+async function seedUsers() {
+    try {
+        const count = await User.countDocuments({ role: 'student' });
+        if (count > 0) {
+            console.log('Student users already exist. Skipping seed.');
+            return;
+        }
+        console.log('No student users found. Seeding database...');
+        const students = [
+            { username: 'Priya', xp: 120, role: 'student' },
+            { username: 'Amit', xp: 90, role: 'student' },
+            { username: 'Sunita', xp: 150, role: 'student' },
+            { username: 'Rohan', xp: 70, role: 'student' }
+        ];
+        await User.insertMany(students);
+        console.log('Dummy student users created!');
+    } catch (error) {
+        console.error('Error seeding users:', error);
+    }
+}
+
+// Call the function to seed users after DB connection
+mongoose.connection.once('open', () => {
+    seedUsers();
+});
+
+
 // --- Middleware ---
-// Set the view engine to EJS
 app.set('view engine', 'ejs');
-// Set the directory for EJS templates
 app.set('views', path.join(__dirname, 'views'));
-// Serve static files (CSS, JS, images) from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
-// Parse URL-encoded bodies (as sent by HTML forms)
 app.use(bodyParser.urlencoded({ extended: true }));
-// Parse JSON bodies
 app.use(bodyParser.json());
 
 

@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+<div class="container my-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/courses">Courses</a></li>
+            <li class="breadcrumb-item"><a href="/courses/<%= course._id %>"><%= course.title %></a></li>
+            <li class="breadcrumb-item active" aria-current="page"><%= lesson.title %></li>
+        </ol>
+    </nav>
+    <hr>
+    <h1><%= lesson.title %></h1>
+    <div class="mt-4 fs-5">
+        <%- lesson.content.replace(/\n/g, '<br>') %>
+    </div>
+
+    <% if (isLastLesson) { %>
+        <div class="mt-5 text-center">
+            <hr>
+            <h4>You've reached the end of the course!</h4>
+            <form action="/courses/<%= course._id %>/complete" method="POST">
+                <button type="submit" class="btn btn-lg btn-success">
+                    Mark as Complete & Claim <%= course.xpAward %> XP
+                </button>
+            </form>
+        </div>
+    <% } %>
+</div>
+<%- include('partials/footer') %>

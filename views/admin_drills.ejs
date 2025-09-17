@@ -1,0 +1,80 @@
+<%- include('partials/header') %>
+
+<div class="container my-5">
+    <div class="row g-5">
+        <div class="col-lg-4">
+            <h3>Schedule a New Drill</h3>
+            <div class="card">
+                <div class="card-body">
+                    <form action="/admin/drills" method="POST">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Drill Title</label>
+                            <input type="text" class="form-control" name="title" placeholder="e.g., Annual Fire Evacuation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="drillType" class="form-label">Drill Type</label>
+                            <select class="form-select" name="drillType">
+                                <option>Fire</option>
+                                <option>Earthquake</option>
+                                <option>Flood</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="scheduledFor" class="form-label">Date and Time</label>
+                            <input type="datetime-local" class="form-control" name="scheduledFor" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Schedule Drill</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <h3>Scheduled & Past Drills</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% drills.forEach(drill => { %>
+                        <tr>
+                            <td><%= drill.title %></td>
+                            <td><%= drill.drillType %></td>
+                            <td><%= new Date(drill.scheduledFor).toLocaleString('en-IN') %></td>
+                            <td>
+                                <% if (drill.status === 'Scheduled') { %>
+                                    <span class="badge bg-warning">Scheduled</span>
+                                <% } else { %>
+                                    <span class="badge bg-success">Completed</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <% if (drill.status === 'Scheduled') { %>
+                                    <form action="/admin/drills/<%= drill._id %>/complete" method="POST" class="me-2">
+                                        <button type="submit" class="btn btn-sm btn-success">Complete</button>
+                                    </form>
+                                    <% } %>
+                                    <form action="/admin/drills/<%= drill._id %>/delete" method="POST">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+
+<div class="container my-5">
+    <div class="text-center">
+        <h1 class="display-4">🤖 AI Emergency Kit Checker</h1>
+        <p class="lead text-muted">Is your go-bag ready? Upload a photo of your emergency kit and our AI will analyze it for you!</p>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form action="/check-kit" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="kitImage" class="form-label">Upload Your Kit Photo</label>
+                            <input class="form-control" type="file" id="kitImage" name="kitImage" accept="image/*" required>
+                        </div>
+                        <div class="d-grid">
+                             <button type="submit" class="btn btn-primary btn-lg">Analyze My Kit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <% if (result || error) { %>
+        <div class="row mt-5">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>AI Analysis Result</h4>
+                    </div>
+                    <div class="card-body">
+                        <% if (result) { %>
+                            <p style="white-space: pre-wrap;"><%= result %></p>
+                        <% } else { %>
+                            <p class="text-danger"><%= error %></p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+</div>
+
+<%- include('partials/footer') %>

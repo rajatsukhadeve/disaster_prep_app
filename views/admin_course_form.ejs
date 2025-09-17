@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+<div class="container my-5">
+    <h1>Create a New Course</h1>
+    <form action="/admin/courses/new" method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Course Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Course Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+         <div class="mb-3">
+            <label for="xpAward" class="form-label">XP Award</label>
+            <input type="number" class="form-control" id="xpAward" name="xpAward" value="50" required>
+        </div>
+        <button type="submit" class="btn btn-success">Save Course</button>
+    </form>
+</div>
+<%- include('partials/footer') %>

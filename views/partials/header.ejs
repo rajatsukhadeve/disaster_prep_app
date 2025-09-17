@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -18,7 +19,18 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li class="nav-item text-white me-3">
+                            Welcome, <%= user.username %> | <%= user.xp %> XP
+                        </li>
+                        <li class="nav-item">
+                            <span class="badge bg-<%= badge.color %> p-2 fs-6">
+                                <%= badge.icon %> <%= badge.name %>
+                            </span>
+                        </li>
+                        <li class="nav-item"><hr class="d-lg-none"></li> <% } %>
+
                     <li class="nav-item"><a class="nav-link" href="/student">Student</a></li>
                     <li class="nav-item"><a class="nav-link" href="/school">School Admin</a></li>
                     <li class="nav-item"><a class="nav-link" href="/ddma">DDMA</a></li>

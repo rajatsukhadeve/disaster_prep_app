@@ -1,0 +1,79 @@
+<%- include('partials/header') %>
+
+<div class="container my-5">
+    <h1 class="mb-4">Preparedness Score & Analytics</h1>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    Course Completion Breakdown
+                </div>
+                <div class="card-body">
+                    <canvas id="courseCompletionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+             <div class="card h-100">
+                <div class="card-header">
+                    Student XP Distribution
+                </div>
+                <div class="card-body">
+                    <canvas id="xpDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Course Completion Chart (Doughnut) ---
+        const courseCtx = document.getElementById('courseCompletionChart').getContext('2d');
+        const courseData = <%- JSON.stringify(courseCompletions) %>;
+        
+        new Chart(courseCtx, {
+            type: 'doughnut',
+            data: {
+                labels: courseData.map(c => c.courseTitle),
+                datasets: [{
+                    label: 'Completions',
+                    data: courseData.map(c => c.completionCount),
+                    backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6c757d'],
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // --- XP Distribution Chart (Bar) ---
+        const xpCtx = document.getElementById('xpDistributionChart').getContext('2d');
+        const xpData = <%- JSON.stringify(xpDistribution) %>;
+        
+        // Format labels for the chart
+        const xpLabels = xpData.map(bucket => {
+            if (typeof bucket._id === 'string') return bucket._id;
+            return `${bucket._id} - ${bucket._id + 49} XP`;
+        });
+
+        new Chart(xpCtx, {
+            type: 'bar',
+            data: {
+                labels: xpLabels,
+                datasets: [{
+                    label: 'Number of Students',
+                    data: xpData.map(bucket => bucket.count),
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>

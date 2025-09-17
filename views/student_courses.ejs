@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+<div class="container my-5">
+    <h1 class="text-center">Available Courses</h1>
+    <div class="row g-4 mt-4">
+        <% courses.forEach(course => { %>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title"><%= course.title %></h5>
+                        <p class="card-text"><%= course.description %></p>
+                        <p class="card-text"><small class="text-muted">XP Reward: <%= course.xpAward %></small></p>
+                        <a href="/courses/<%= course._id %>" class="btn btn-primary mt-auto">Start Course</a>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+<%- include('partials/footer') %>

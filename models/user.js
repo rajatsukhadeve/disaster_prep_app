@@ -6,18 +6,23 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    password: {
+    password: { // For future real login system
         type: String,
-        required: true
+        default: 'password'
     },
     role: {
         type: String,
         required: true,
-        enum: ['student', 'school', 'ddma'] // The role must be one of these values
+        enum: ['student', 'school', 'ddma'],
+        default: 'student'
     },
-    schoolId: { // An example field for connecting users to an institution
-        type: String
-    }
+    // NEW FIELD for gamification
+    
+    xp: {
+        type: Number,
+        default: 0
+    },
+    completedCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }]
 });
 
 module.exports = mongoose.model('User', userSchema);

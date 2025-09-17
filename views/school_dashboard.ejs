@@ -1,7 +1,10 @@
 <%- include('partials/header') %>
 
 <div class="container my-5">
-    <h1 class="mb-4">School Administration Dashboard</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>School Administration</h1>
+        <a href="/admin/dashboard" class="btn btn-primary">View Preparedness Dashboard</a>
+    </div>
 
     <div class="card border-warning mb-5 shadow">
          <div class="card-header bg-warning">
@@ -22,27 +25,27 @@
          <div class="col-md-6 col-lg-4">
             <div class="card h-100 text-center feature-card">
                 <div class="card-body">
-                    <h5 class="card-title">Campus Safety Info</h5>
-                    <p class="card-text">Review and update campus-specific safety protocols.</p>
-                    <a href="/contacts" class="btn btn-primary">View Protocols</a>
+                    <h5 class="card-title">Manage Courses</h5>
+                    <p class="card-text">Create and edit disaster safety courses for students.</p>
+                    <a href="/admin/courses" class="btn btn-success">Go to Courses</a>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 text-center feature-card feature-disabled">
-                <div class="card-body">
-                    <h5 class="card-title">Preparedness Score (Analytics)</h5>
-                    <p class="card-text">Track student quiz participation and drill scores.</p>
-                    <button class="btn btn-secondary" disabled>View Dashboard</button>
-                </div>
+            <div class="card h-100 text-center feature-card">
+            <div class="card-body">
+                <h5 class="card-title">Preparedness Score (Analytics)</h5>
+                <p class="card-text">View detailed charts on student progress and course completions.</p>
+                <a href="/admin/analytics" class="btn btn-info">View Analytics</a>
             </div>
         </div>
+        </div>
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 text-center feature-card feature-disabled">
+            <div class="card h-100 text-center feature-card">
                 <div class="card-body">
                     <h5 class="card-title">Schedule Mock Drills</h5>
                     <p class="card-text">Plan and notify students and staff of upcoming drills.</p>
-                    <button class="btn btn-secondary" disabled>Schedule Drill</button>
+                    <a href="/admin/drills" class="btn btn-primary">Schedule Drill</a>
                 </div>
             </div>
         </div>

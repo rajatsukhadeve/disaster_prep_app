@@ -1,0 +1,103 @@
+<%- include('partials/header') %>
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Preparedness Dashboard</h1>
+        <a href="/admin/courses" class="btn btn-outline-primary">Manage Courses</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center text-bg-primary h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Total Students</h5>
+                    <p class="card-text display-4 fw-bold"><%= totalStudents %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center text-bg-success h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Average XP</h5>
+                    <p class="card-text display-4 fw-bold"><%= averageXp %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center text-bg-info h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Available Courses</h5>
+                    <p class="card-text display-4 fw-bold"><%= courseCount %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    Top Student Engagement (by XP)
+                </div>
+                <div class="card-body">
+                    <canvas id="topStudentsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+             <div class="card">
+                <div class="card-header">
+                    🏆 Top 5 Students
+                </div>
+                <ul class="list-group list-group-flush">
+                    <% topStudents.forEach(student => { %>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <%= student.username %>
+                            <span class="badge bg-success rounded-pill"><%= student.xp %> XP</span>
+                        </li>
+                    <% }) %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // This script block will render the chart using the data from our backend
+    document.addEventListener('DOMContentLoaded', () => {
+        const ctx = document.getElementById('topStudentsChart').getContext('2d');
+        
+        // Data passed from the EJS template
+        const studentLabels = <%- JSON.stringify(topStudents.map(s => s.username)) %>;
+        const studentXp = <%- JSON.stringify(topStudents.map(s => s.xp)) %>;
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: studentLabels,
+                datasets: [{
+                    label: 'Experience Points (XP)',
+                    data: studentXp,
+                    backgroundColor: 'rgba(25, 135, 84, 0.7)',
+                    borderColor: 'rgba(25, 135, 84, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>

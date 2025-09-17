@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+<div class="container my-5">
+    <div class="text-center">
+        <h1 class="display-4">🏆 Leaderboard</h1>
+        <p class="lead text-muted">See who the top disaster-prepared students are!</p>
+    </div>
+
+    <div class="card shadow-sm mt-5">
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Student Name</th>
+                        <th scope="col">Experience Points (XP)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% students.forEach((student, index) => { %>
+                        <tr>
+                            <th scope="row"><%= index + 1 %></th>
+                            <td><%= student.username %></td>
+                            <td><%= student.xp %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

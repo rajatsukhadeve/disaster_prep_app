@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+<div class="container my-5">
+    <h1><%= course.title %></h1>
+    <p class="lead"><%= course.description %></p>
+    <hr>
+    <h3>Lessons</h3>
+    <div class="list-group">
+        <% course.lessons.forEach(lesson => { %>
+            <a href="/courses/<%= course._id %>/lessons/<%= lesson._id %>" class="list-group-item list-group-item-action">
+                <%= lesson.title %>
+            </a>
+        <% }) %>
+    </div>
+</div>
+<%- include('partials/footer') %>

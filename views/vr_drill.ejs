@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeZone | Advanced VR Drill</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+</head>
+<body>
+    <a-scene id="vr-scene">
+
+        <a-assets>
+            <img id="classroom" src="/images/classroom.jpg" />
+            <img id="hallway" src="/images/hallway.jpg" />
+            <audio id="alarm-sound" src="/sounds/alarm.mp3" preload="auto"></audio>
+            <audio id="correct-sound" src="/sounds/correct.mp3" preload="auto"></audio>
+            <audio id="wrong-sound" src="/sounds/wrong.mp3" preload="auto"></audio>
+        </a-assets>
+
+        <a-sky id="sky-background" src="#classroom" radius="10"></a-sky>
+
+        <a-text id="instruction-text" value="The fire alarm is ringing! What should you do?" 
+                position="-2.5 3 -5" color="#FFFFFF" width="5"></a-text>
+        <a-text id="timer-text" value="Time: 10" position="4 3.5 -5" color="#FFD700" width="4"></a-text>
+        <a-text id="score-text" value="Score: 0" position="4 3 -5" color="#00FF00" width="4"></a-text>
+        <a-text id="feedback-text" value="" position="0 0 0" color="#FFD700" width="4" visible="false" align="center"></a-text>
+
+        <a-cylinder id="choice-hide" data-correct="false" data-scene="1" color="blue" radius="0.5" height="0.2" position="-4 1 -6"></a-cylinder>
+        <a-text value="Hide Under Desk" position="-4.7 1.5 -6" color="#FFFFFF" width="3"></a-text>
+        <a-cylinder id="choice-evacuate" data-correct="true" data-scene="1" color="green" radius="0.5" height="0.2" position="4 1 -6"></a-cylinder>
+        <a-text value="Go to the Exit" position="3.5 1.5 -6" color="#FFFFFF" width="3"></a-text>
+        
+        <a-cylinder id="choice-run" data-correct="false" data-scene="2" color="blue" radius="0.5" height="0.2" position="-4 1 -6" visible="false"></a-cylinder>
+        <a-text id="text-run" value="Run Upright" position="-4.7 1.5 -6" color="#FFFFFF" width="3" visible="false"></a-text>
+        <a-cylinder id="choice-crawl" data-correct="true" data-scene="2" color="green" radius="0.5" height="0.2" position="4 1 -6" visible="false"></a-cylinder>
+        <a-text id="text-crawl" value="Crawl Towards Exit" position="3.2 1.5 -6" color="#FFFFFF" width="3" visible="false"></a-text>
+
+        <a-sound id="alarm" src="#alarm-sound" autoplay="true" loop="true" position="0 2 0"></a-sound>
+        <a-sound id="correct" src="#correct-sound" autoplay="false" position="0 2 0"></a-sound>
+        <a-sound id="wrong" src="#wrong-sound" autoplay="false" position="0 2 0"></a-sound>
+
+        <a-camera id="camera">
+            <a-cursor id="cursor" color="yellow"></a-cursor>
+        </a-camera>
+    </a-scene>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timerText = document.getElementById('timer-text');
+            const scoreText = document.getElementById('score-text');
+            const feedbackText = document.getElementById('feedback-text');
+            const instructionText = document.getElementById('instruction-text');
+            const sky = document.getElementById('sky-background');
+            const alarmSound = document.getElementById('alarm');
+            const cursor = document.getElementById('cursor');
+
+            let score = 0;
+            let timer = 10;
+            let timerInterval;
+            let drillEnded = false;
+            const demoUserId = "PASTE_A_REAL_STUDENT_ID_HERE";
+
+            function startTimer() {
+                timer = 10;
+                timerText.setAttribute('value', `Time: ${timer}`);
+                clearInterval(timerInterval);
+                timerInterval = setInterval(() => {
+                    timer--;
+                    timerText.setAttribute('value', `Time: ${timer}`);
+                    if (timer <= 0) {
+                        clearInterval(timerInterval);
+                        // If time runs out on scene 2, end the drill
+                        if (instructionText.getAttribute('value').includes('smoke')) {
+                            endDrill();
+                        }
+                    }
+                }, 1000);
+            }
+
+            function showFeedback(targetEl, isCorrect) {
+                const feedback = isCorrect ? 'Correct!' : 'Incorrect!';
+                const feedbackColor = isCorrect ? '#00FF00' : '#FF0000';
+                const soundEl = isCorrect ? document.getElementById('correct') : document.getElementById('wrong');
+                
+                const targetPosition = targetEl.getAttribute('position');
+                feedbackText.setAttribute('position', `${targetPosition.x} 2.5 ${targetPosition.z}`);
+                feedbackText.setAttribute('value', feedback);
+                feedbackText.setAttribute('color', feedbackColor);
+                feedbackText.setAttribute('visible', true);
+                
+                alarmSound.components.sound.pauseSound();
+                soundEl.components.sound.playSound();
+
+                setTimeout(() => {
+                    feedbackText.setAttribute('visible', false);
+                    if (!drillEnded) alarmSound.components.sound.playSound();
+                }, 3000);
+            }
+
+            // --- REWRITTEN AND SIMPLIFIED LOGIC ---
+
+            // Get references to all choices
+            const choiceHide = document.getElementById('choice-hide');
+            const choiceEvacuate = document.getElementById('choice-evacuate');
+            const choiceRun = document.getElementById('choice-run');
+            const choiceCrawl = document.getElementById('choice-crawl');
+
+            // Handle Scene 1, Choice 1 (Incorrect)
+            choiceHide.addEventListener('click', () => {
+                if (drillEnded) return;
+                clearInterval(timerInterval);
+                showFeedback(choiceHide, false);
+                setTimeout(setupScene2, 1500);
+            });
+
+            // Handle Scene 1, Choice 2 (Correct)
+            choiceEvacuate.addEventListener('click', () => {
+                if (drillEnded) return;
+                clearInterval(timerInterval);
+                score += timer * 10;
+                scoreText.setAttribute('value', `Score: ${score}`);
+                showFeedback(choiceEvacuate, true);
+                setTimeout(setupScene2, 1500);
+            });
+            
+            // Handle Scene 2, Choice 1 (Incorrect)
+            choiceRun.addEventListener('click', () => {
+                if (drillEnded) return;
+                clearInterval(timerInterval);
+                showFeedback(choiceRun, false);
+                endDrill(); // End drill after this choice
+            });
+
+            // Handle Scene 2, Choice 2 (Correct)
+            choiceCrawl.addEventListener('click', () => {
+                if (drillEnded) return;
+                clearInterval(timerInterval);
+                score += timer * 10;
+                scoreText.setAttribute('value', `Score: ${score}`);
+                showFeedback(choiceCrawl, true);
+                endDrill(); // End drill after this choice
+            });
+
+            function setupScene2() {
+                // Hide Scene 1 elements
+                choiceHide.setAttribute('visible', false);
+                choiceEvacuate.setAttribute('visible', false);
+                document.querySelector('[value="Hide Under Desk"]').setAttribute('visible', false);
+                document.querySelector('[value="Go to the Exit"]').setAttribute('visible', false);
+                
+                // Show Scene 2 elements
+                sky.setAttribute('src', '#hallway');
+                instructionText.setAttribute('value', 'The hallway is full of smoke. What is the safest way to move?');
+                choiceRun.setAttribute('visible', true);
+                choiceCrawl.setAttribute('visible', true);
+                document.getElementById('text-run').setAttribute('visible', true);
+                document.getElementById('text-crawl').setAttribute('visible', true);
+                
+                cursor.setAttribute('position', '0 0 -1');
+                startTimer();
+            }
+
+            function endDrill() {
+                drillEnded = true;
+                clearInterval(timerInterval);
+                setTimeout(() => {
+                    instructionText.setAttribute('value', `DRILL COMPLETE!\n\nFinal Score: ${score}`);
+                    choiceRun.setAttribute('visible', false);
+                    choiceCrawl.setAttribute('visible', false);
+                    document.getElementById('text-run').setAttribute('visible', false);
+                    document.getElementById('text-crawl').setAttribute('visible', false);
+                    timerText.setAttribute('visible', false);
+                    alarmSound.components.sound.stopSound();
+
+                    if (score > 0) {
+                        fetch('/quiz/complete', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId: demoUserId, score: score })
+                        })
+                        .then(res => res.json())
+                        .then(data => { if(data.success) console.log("Drill XP successfully added!"); })
+                        .catch(err => console.error("Error updating XP from drill:", err));
+                    }
+                    
+                    setTimeout(() => {
+                        window.location.href = '/leaderboard';
+                    }, 3000);
+                }, 1500);
+            }
+            
+            startTimer();
+        });
+    </script>
+</body>
+</html>

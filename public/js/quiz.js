@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentQuestionIndex = 0;
     let score = 0;
 
+    // --- NEW 10 QUESTION QUIZ ---
     const quizQuestions = [
         {
             question: "What is the first thing you should do during an earthquake?",
@@ -21,33 +22,93 @@ document.addEventListener('DOMContentLoaded', () => {
                 { text: "Drop, Cover, and Hold On", correct: true },
                 { text: "Stand in a doorway", correct: false },
                 { text: "Call for help", correct: false }
-            ],
-            explanation: "Drop to the ground, take cover under a sturdy table, and hold on until the shaking stops. This is the safest action."
+            ]
         },
         {
-            question: "Which of these items should be in your emergency kit?",
+            question: "In case of a fire, you should stay low to the ground to avoid what?",
             answers: [
-                { text: "Video games", correct: false },
-                { text: "Water, first-aid kit, and a flashlight", correct: true },
-                { text: "Decorative candles", correct: false },
-                { text: "Heavy blankets", correct: false }
-            ],
-            explanation: "A basic emergency kit should contain essentials like water, food, a first-aid kit, flashlight, and batteries."
+                { text: "Heat", correct: false },
+                { text: "Falling debris", correct: false },
+                { text: "Smoke inhalation", correct: true },
+                { text: "Flames", correct: false }
+            ]
         },
         {
-            question: "If you are caught in a flood, what should you do?",
+            question: "Which of these is NOT an essential item for an emergency kit?",
             answers: [
-                { text: "Try to walk or swim through the floodwater", correct: false },
+                { text: "First-aid supplies", correct: false },
+                { text: "A week's supply of water", correct: false },
+                { text: "Video games", correct: true },
+                { text: "A battery-powered flashlight", correct: false }
+            ]
+        },
+        {
+            question: "If you are caught in a flood, what is the safest action?",
+            answers: [
+                { text: "Try to swim through the water", correct: false },
+                { text: "Seek higher ground immediately", correct: true },
                 { text: "Stay in your car", correct: false },
-                { text: "Climb to the highest point of your building", correct: true },
-                { text: "Wait for the water to go down", correct: false }
-            ],
-            explanation: "Seek higher ground immediately. Never enter floodwaters as they can be deeper and faster-moving than they appear."
+                { text: "Wait on the ground floor", correct: false }
+            ]
+        },
+        {
+            question: "What does the 'DDMA' stand for in disaster management?",
+            answers: [
+                { text: "District Disaster Management Authority", correct: true },
+                { text: "Daily Disaster Monitoring Agency", correct: false },
+                { text: "Department of Disaster Mitigation", correct: false },
+                { text: "Drill Deployment and Management Agency", correct: false }
+            ]
+        },
+        {
+            question: "During a cyclone, where is the safest place to take shelter?",
+            answers: [
+                { text: "In a car", correct: false },
+                { text: "Under a large tree", correct: false },
+                { text: "In a sturdy building, away from windows", correct: true },
+                { text: "On the beach", correct: false }
+            ]
+        },
+        {
+            question: "What is the national emergency helpline number in India?",
+            answers: [
+                { text: "100", correct: false },
+                { text: "101", correct: false },
+                { text: "112", correct: true },
+                { text: "108", correct: false }
+            ]
+        },
+        {
+            question: "What is a key component of a family disaster plan?",
+            answers: [
+                { text: "Knowing your favorite TV shows", correct: false },
+                { text: "A designated meeting place outside the home", correct: true },
+                { text: "Having the latest smartphone", correct: false },
+                { text: "Stocking up on snacks", correct: false }
+            ]
+        },
+        {
+            question: "If someone is bleeding heavily, what is the first thing you should do?",
+            answers: [
+                { text: "Offer them water", correct: false },
+                { text: "Apply direct pressure to the wound", correct: true },
+                { text: "Help them stand up", correct: false },
+                { text: "Look for a bandage", correct: false }
+            ]
+        },
+        {
+            question: "After a major disaster, how should you primarily get information?",
+            answers: [
+                { text: "From social media rumors", correct: false },
+                { text: "By calling friends and family", correct: false },
+                { text: "From official news sources and authorities", correct: true },
+                { text: "By exploring the affected area", correct: false }
+            ]
         }
     ];
 
     startBtn.addEventListener('click', startQuiz);
-    restartBtn.addEventListener('click', startQuiz);
+    restartBtn.addEventListener('click', () => window.location.href = '/leaderboard'); // Restart button now goes to leaderboard
 
     function startQuiz() {
         currentQuestionIndex = 0;
@@ -93,22 +154,44 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 showScore();
             }
-        }, 1500); // Wait 1.5 seconds before next question
+        }, 1500);
     }
 
     function showScore() {
         questionScreen.classList.add('d-none');
         scoreScreen.classList.remove('d-none');
-        scoreText.innerText = `${score} out of ${quizQuestions.length}`;
-        let feedback = '';
-        if (score === quizQuestions.length) {
-            feedback = "Excellent! You're a preparedness expert!";
-        } else if (score >= quizQuestions.length / 2) {
-            feedback = "Good job! You know your safety basics.";
-        } else {
-            feedback = "It's a good start. Review the learning materials to improve!";
-        }
-        scoreFeedback.innerText = feedback;
+        
+        const xpGained = score * 10;
+        scoreText.innerText = `You scored ${score} out of ${quizQuestions.length}`;
+        scoreFeedback.innerText = `Awarding ${xpGained} XP... Redirecting to leaderboard.`;
+        restartBtn.innerText = 'View Leaderboard';
+
+        // --- NEW: Update XP and redirect to leaderboard ---
+        // !!! IMPORTANT: Make sure this is a REAL student ID from your database !!!
+        const demoUserId = "68ca7e2c77b55d5a050def87";
+        
+        fetch('/quiz/complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: demoUserId, score: xpGained })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("XP updated successfully!");
+                // Redirect after a short delay to allow user to see score
+                setTimeout(() => {
+                    window.location.href = '/leaderboard';
+                }, 2000);
+            }
+        })
+        .catch(error => {
+            console.error("Error updating XP:", error);
+            // Still redirect even if the fetch fails
+            setTimeout(() => {
+                window.location.href = '/leaderboard';
+            }, 2000);
+        });
     }
 
     function resetState() {
