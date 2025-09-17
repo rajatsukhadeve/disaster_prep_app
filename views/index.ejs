@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+
+<div class="container text-center my-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1 class="display-4 fw-bold">Disaster Preparedness Portal</h1>
+            <p class="lead text-muted mt-3">Empowering schools and communities with the knowledge to stay safe during emergencies.</p>
+            <hr class="my-4">
+            <h3 class="mb-4">Select your role to continue</h3>
+        </div>
+    </div>
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 shadow-lg border-primary">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-primary">I am a Student</h5>
+                    <p class="card-text">Access learning modules, quizzes, and safety alerts.</p>
+                    <a href="/student" class="btn btn-primary mt-auto">Go to Student Dashboard</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 shadow-lg border-success">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-success">I am a School/College Admin</h5>
+                    <p class="card-text">Manage preparedness plans and monitor drills.</p>
+                    <a href="/school" class="btn btn-success mt-auto">Go to Admin Dashboard</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 shadow-lg border-danger">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-danger">I am a DDMA Official</h5>
+                    <p class="card-text">Issue alerts and oversee regional preparedness.</p>
+                    <a href="/ddma" class="btn btn-danger mt-auto">Go to DDMA Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,52 @@
+<%- include('partials/header') %>
+
+<div class="container my-5">
+    <h1 class="mb-4">School Administration Dashboard</h1>
+
+    <div class="card border-warning mb-5 shadow">
+         <div class="card-header bg-warning">
+            <h4 class="mb-0">📢 Latest Broadcast Alert</h4>
+        </div>
+         <div class="card-body">
+            <% if (alert) { %>
+                <h5 class="card-title"><%= alert.title %> (Severity: <%= alert.severity %>)</h5>
+                <p class="card-text"><%= alert.message %></p>
+                <p class="card-text"><small class="text-muted">Issued for <%= alert.region %> at <%= alert.issuedAt.toLocaleString() %></small></p>
+            <% } else { %>
+                <p class="text-success fw-bold">All clear! No active alerts for your region.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="row g-4">
+         <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Campus Safety Info</h5>
+                    <p class="card-text">Review and update campus-specific safety protocols.</p>
+                    <a href="/contacts" class="btn btn-primary">View Protocols</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card feature-disabled">
+                <div class="card-body">
+                    <h5 class="card-title">Preparedness Score (Analytics)</h5>
+                    <p class="card-text">Track student quiz participation and drill scores.</p>
+                    <button class="btn btn-secondary" disabled>View Dashboard</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card feature-disabled">
+                <div class="card-body">
+                    <h5 class="card-title">Schedule Mock Drills</h5>
+                    <p class="card-text">Plan and notify students and staff of upcoming drills.</p>
+                    <button class="btn btn-secondary" disabled>Schedule Drill</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

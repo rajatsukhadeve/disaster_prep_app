@@ -1,0 +1,70 @@
+<%- include('partials/header') %>
+
+<div class="container my-5">
+    <h1 class="mb-4">Welcome, Student!</h1>
+
+    <div class="card border-danger mb-5 shadow">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">🚨 Latest Emergency Alert</h4>
+        </div>
+        <div class="card-body">
+            <% if (alert) { %>
+                <h5 class="card-title"><%= alert.title %> (Severity: <%= alert.severity %>)</h5>
+                <p class="card-text"><%= alert.message %></p>
+                <p class="card-text"><small class="text-muted">Issued for <%= alert.region %> at <%= alert.issuedAt.toLocaleString() %></small></p>
+            <% } else { %>
+                <p class="text-success fw-bold">All clear! No active alerts for your region.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Gamified Quiz</h5>
+                    <p class="card-text">Test your knowledge on disaster safety and earn badges.</p>
+                    <a href="/quiz" class="btn btn-primary">Start Quiz</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Emergency Contacts</h5>
+                    <p class="card-text">Quick access to local emergency services numbers.</p>
+                    <a href="/contacts" class="btn btn-warning">View Contacts</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card feature-disabled">
+                <div class="card-body">
+                    <h5 class="card-title">VR Mock Drills (Coming Soon)</h5>
+                    <p class="card-text">Experience realistic disaster scenarios in virtual reality.</p>
+                    <button class="btn btn-secondary" disabled>Launch VR</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card feature-disabled">
+                <div class="card-body">
+                    <h5 class="card-title">Voice Assistant (Coming Soon)</h5>
+                    <p class="card-text">Ask for emergency tips and info using your voice.</p>
+                    <button class="btn btn-secondary" disabled>Activate Assistant</button>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-6 col-lg-4">
+            <div class="card h-100 text-center feature-card feature-disabled">
+                <div class="card-body">
+                    <h5 class="card-title">Offline Mode Info</h5>
+                    <p class="card-text">Key safety info is cached for access without internet.</p>
+                    <button class="btn btn-info" disabled>Cached Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

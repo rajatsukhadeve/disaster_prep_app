@@ -1,0 +1,30 @@
+<%- include('partials/header') %>
+
+<div class="container my-5 text-center">
+    <h1>Disaster Safety Quiz</h1>
+    <p class="lead">Test your knowledge and see how prepared you are!</p>
+    <hr>
+
+    <div id="quiz-container" class="mx-auto" style="max-width: 600px;">
+        <div id="start-screen">
+            <button id="start-btn" class="btn btn-primary btn-lg">Start Quiz</button>
+        </div>
+
+        <div id="question-screen" class="d-none">
+            <h3 id="question-text" class="mb-4"></h3>
+            <div id="answer-buttons" class="d-grid gap-3">
+                </div>
+        </div>
+
+        <div id="score-screen" class="d-none">
+            <h2>Quiz Complete!</h2>
+            <p class="lead">You scored <span id="score-text" class="fw-bold"></span>.</p>
+            <p id="score-feedback" class="fs-5"></p>
+            <button id="restart-btn" class="btn btn-info">Try Again</button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/quiz.js"></script>
+
+<%- include('partials/footer') %>
