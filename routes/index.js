@@ -26,6 +26,8 @@ router.get('/student', async (req, res) => {
         const demoUserId = "68ca7e2c77b55d5a050def87"; // Your ID is here
         const studentUser = await User.findById(demoUserId);
         const upcomingDrill = await Drill.findOne({ status: 'Scheduled', scheduledFor: { $gte: new Date() } }).sort({ scheduledFor: 1 });
+        
+        // CORRECTED BADGE ICONS
         let badge = { name: 'Newbie', color: 'light', icon: '🌱' };
         if (studentUser) {
             if (studentUser.xp >= 150) { badge = { name: 'Gold Pro', color: 'warning', icon: '🥇' }; } 
@@ -80,8 +82,6 @@ router.get('/courses', async (req, res) => { const courses = await Course.find()
 router.get('/courses/:id', async (req, res) => { const course = await Course.findById(req.params.id).populate('lessons'); res.render('student_course_detail', { title: course.title, course }); });
 router.get('/courses/:courseId/lessons/:lessonId', async (req, res) => { const lesson = await Lesson.findById(req.params.lessonId); const course = await Course.findById(req.params.courseId); const isLastLesson = course.lessons.length > 0 && course.lessons[course.lessons.length - 1].equals(lesson._id); res.render('student_lesson_view', { title: lesson.title, lesson, course, isLastLesson }); });
 router.get('/check-kit', (req, res) => { res.render('kit_checker', { title: 'AI Kit Checker', result: null, error: null }); });
-
-// --- THE MISSING ROUTE IS HERE ---
 router.get('/leaderboard', async (req, res) => {
     try {
         const topStudents = await User.find({ role: 'student' }).sort({ xp: -1 }).limit(10);
